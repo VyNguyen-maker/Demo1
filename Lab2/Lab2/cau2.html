@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style type = "text/css">
+        .container{
+            background-color: aquamarine;
+            border: 2px solid black;
+            width: 50%;
+        }
+        .a{
+            color:blue;
+            text-align: center;
+            font-weight: bold;
+        }
+        button{
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        table, td, th{
+            border: 1px solid black;
+            border-collapse:collapse;
+            width: 100%;
+        }
+        th, td{
+            width: 50px;
+        }
+        h2{
+            text-align: center;
+
+        }
+        div{
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+    <form action="" class = "container">
+        <h2>THỰC ĐƠN</h2>
+        <table>
+            <tr>
+                <th class = "a">Thức ăn</th>
+                <th class = "a">Nước uống</th>
+                <th class = "a">Thời điểm</th>
+            </tr>
+            <tr>
+                <td>
+                    <select name="" id="Monan" multiple>
+                        <option selected value="20000">Bún bò</option>
+                        <option value="18000">Hủ tiếu</option>
+                        <option value="17000">Bánh canh</option>
+                        <option value="19000">Phở bò</option>
+                        <option selected value="15000">Nuôi</option>
+                        <option value="12000">Bánh mì thịt</option>
+                        <option value="15000">Bánh mì cuốn</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="" id="Nuocuong" multiple>
+                        <option selected value="12000">Cà phê đá</option>
+                        <option  value="15000">Cà phê sữa đá</option>
+                        <option selected value="13000">Chanh dây</option>
+                        <option value="12000">Chanh muối</option>
+                        <option value="14000">Xí muội</option>
+                        <option value="13000">Sữa tươi</option>
+                        <option value="17000">Cam vắt</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="radio" name = "thoidiem" value = "bn"><label for="thoidiem">Ban ngày</label><br>
+                    <input type="radio" name = "thoidiem" value = "bd"><label for="thoidiem">Ban đêm</label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan = "3">
+                    <div>
+                        <button type = "button" onclick = "tinhtien()">Tính tiền</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br>
+
+    <div id="result"></div>
+
+    <script type = "text/javascript">
+        function tinhtien(){
+            let selectedThoiDiem = document.querySelector('input[name="thoidiem"]:checked').value;
+            let monAnOptions = document.getElementById('Monan').selectedOptions;
+            let nuocUongOptions = document.getElementById('Nuocuong').selectedOptions;
+            let tongTien = 0;
+
+            for (let option of monAnOptions) {
+                tongTien += parseInt(option.value);
+            }
+
+            for (let option of nuocUongOptions) {
+                tongTien += parseInt(option.value);
+            }
+
+            if (selectedThoiDiem === 'bd') {
+                tongTien *= 1.1; 
+            }
+
+            let table = '<table><tr><th>Các món đã dùng</th><th>Tiền</th></tr>';
+
+            for (let option of monAnOptions) {
+                table += `<tr><td>${option.text}</td><td>${option.value}</td></tr>`;
+            }
+
+            for (let option of nuocUongOptions) {
+                table += `<tr><td>${option.text}</td><td>${option.value}</td></tr>`;
+            }
+
+            table += `<tr><td><strong>Tổng tiền</strong></td><td><strong>${tongTien} đồng</strong></td></tr></table>`;
+
+            document.getElementById('result').innerHTML = table;
+        }
+    </script>
+</body>
+</html>

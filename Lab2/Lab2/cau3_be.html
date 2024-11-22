@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type = "text/css">
+        table{
+            border: 1px solid black;
+            width: 80%;
+            border-collapse:collapse;
+        }
+        th, td{
+            border: 1px solid black;
+            width: 50px;
+        }
+        #B,#B1,#B2,#B3 {
+            margin: 0 auto; 
+            width: 70%;
+            text-align: center;
+        }
+
+        h3{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td id="ngaygio"></td>
+            <td>Nhân viên: Nguyễn Văn A</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h3>THỰC ĐƠN</h3>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table id="B">
+                    <tr>
+                        <th>Bàn</th>
+                        <th>Món ăn</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select name="" id="Ban">
+                                <option selected value="1">Bàn 1</option>
+                                <option value="2">Bàn 2</option>
+                                <option value="3">Bàn 3</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="" id="Monan" onchange="tinhTien()">
+                                <option selected value="20000">Bún bò</option>
+                                <option value="18000">Hủ tiếu</option>
+                                <option value="17000">Bánh canh</option>
+                                <option value="19000">Phở bò</option>
+                                <option value="15000">Nuôi</option>
+                                <option value="12000">Bánh mì thịt</option>
+                                <option value="15000">Bánh cuốn</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    
+    <br>
+    <table>
+        <tr>
+            <th>Bàn 1</th>
+            <th>Bàn 2</th>
+            <th>Bàn 3</th>
+        </tr>
+        <tr>
+            <td>
+                <table id="B1">
+                    <tr>
+                        <th>Món</th>
+                        <th>SL</th>
+                        <th>Tiền</th>
+                        <th></th>
+                    </tr>
+                    <tbody id="tableB1"></tbody>
+                    <tr>
+                        <th>Tổng tiền</th>
+                        <th colspan="3" id="tongB1">0</th>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table id="B2">
+                    <tr>
+                        <th>Món</th>
+                        <th>SL</th>
+                        <th>Tiền</th>
+                        <th></th>
+                    </tr>
+                    <tbody id="tableB2"></tbody>
+                    <tr>
+                        <th>Tổng tiền</th>
+                        <th colspan="3" id="tongB2">0</th>
+                    </tr>
+                </table>
+
+            </td>
+            <td>
+                <table id="B3">
+                    <tr>
+                        <th>Món</th>
+                        <th>SL</th>
+                        <th>Tiền</th>
+                        <th></th>
+                    </tr>
+                    <tbody id="tableB3"></tbody>
+                    <tr>
+                        <th>Tổng tiền</th>
+                        <th colspan="3" id="tongB3">0</th>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+        <tr>
+            <td><button type = "button" onclick="inHD(1)">In hóa đơn</button></td>
+            <td><button type = "button" onclick="inHD(2)">In hóa đơn</button></td>
+            <td><button type = "button" onclick="inHD(3)">In hóa đơn</button></td>
+        </tr>
+    </table>
+    
+    <script type="text/javascript">
+
+        function getDateTime() {
+            var today = new Date(),
+                current_day = today.getDay() + 1 != 1 ? "Thứ " + String(today.getDay() + 1) : "Chủ Nhật",
+                dd = String(today.getDate()).padStart(2, "0"),
+                mm = String(today.getMonth() + 1).padStart(2, "0"),
+                yyyy = today.getFullYear(),
+                hours = today.getHours(),
+                minutes = today.getMinutes() < 10 ? "0" + today.getMinutes() : today.getMinutes();
+
+            today = current_day + ", " + mm + "/" + dd + "/" + yyyy + ", " + hours + ":" + minutes;
+            return today;
+        }
+        document.getElementById("ngaygio").innerText = getDateTime();
+
+        function tinhTien() {
+            const monanSelect = document.getElementById('Monan');
+            const selectedValue = parseInt(monanSelect.value);
+            const selectedText = monanSelect.options[monanSelect.selectedIndex].text;
+            const banSelect = document.getElementById('Ban');
+            const selectedBan = banSelect.value;
+    
+            // Chọn tbody tương ứng với bàn
+            const tableBody = document.getElementById(`tableB${selectedBan}`);
+            const totalCell = document.getElementById(`tongB${selectedBan}`);
+    
+            // Kiểm tra nếu món đã tồn tại trong bảng
+            let found = false;
+            for (let row of tableBody.rows) {
+                if (row.cells[0].innerText === selectedText) {
+                    // Cập nhật số lượng và tiền
+                    const quantityCell = row.cells[1];
+                    const priceCell = row.cells[2];
+                    quantityCell.innerText = parseInt(quantityCell.innerText) + 1;
+                    priceCell.innerText = (parseInt(priceCell.innerText) + selectedValue).toString();
+                    found = true;
+                    break;
+                }
+            }
+    
+            // Nếu món không tồn tại, thêm mới
+            if (!found) {
+                const newRow = tableBody.insertRow();
+                newRow.insertCell(0).innerText = selectedText;
+                newRow.insertCell(1).innerText = 1; // Số lượng
+                newRow.insertCell(2).innerText = selectedValue; // Tiền
+                const deleteCell = newRow.insertCell(3);
+                const deleteButton = document.createElement('button');
+                deleteButton.innerText = 'Xóa';
+                deleteButton.onclick = function() {
+                    tableBody.deleteRow(newRow.rowIndex - 1);
+                    updateTotal(selectedBan);
+                };
+                deleteCell.appendChild(deleteButton);
+            }
+            // Cập nhật tổng tiền
+            updateTotal(selectedBan);
+        }
+    
+        function updateTotal(ban) {
+            const tableBody = document.getElementById(`tableB${ban}`);
+            const totalCell = document.getElementById(`tongB${ban}`);
+            let total = 0;
+    
+            for (let row of tableBody.rows) {
+                total += parseInt(row.cells[2].innerText) || 0;
+            }
+    
+            totalCell.innerText = total.toString();
+        }
+
+        function inHD(loai) {
+        const tableBody = document.getElementById(`tableB${loai}`);
+        const totalCell = document.getElementById(`tongB${loai}`).innerText;
+
+        // Tạo nội dung hóa đơn
+        let billContent = `<h1>Hóa đơn</h1>`;
+        billContent += `<p>Ngày hóa đơn: ${getDateTime()}</p>`;
+        billContent += `<p>Nhân viên: Nguyễn Văn A</p>`;
+        billContent += `<p>Bàn Số: ${loai}</p>`;
+        billContent += `<table border="1"><tr><th>Món</th><th>SL</th><th>Thành Tiền</th></tr>`;
+
+
+        for (let i = 0; i < tableBody.rows.length; i++) {
+            const row = tableBody.rows[i];
+            const dish = row.cells[0].innerText; 
+            const quantity = row.cells[1].innerText;
+            const price = row.cells[2].innerText;
+            billContent += `<tr><td>${dish}</td><td>${quantity}</td><td>${price}</td></tr>`;
+        }
+
+        billContent += `</table>`;
+        billContent += `<p>Tổng tiền: ${totalCell} đ</p>`;
+
+        // Tạo trang HTML mới
+        const newWindow = window.open();
+        newWindow.document.write(`
+            <html>
+            <head>
+                <title>Hóa Đơn</title>
+                <style>
+                    body { font-family: Arial, sans-serif; }
+                    table { width: 100%; border-collapse: collapse; }
+                    th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                    h1 { text-align: center; }
+                </style>
+            </head>
+            <body>
+                ${billContent}
+            </body>
+            </html>
+        `);
+        newWindow.document.close();
+        }
+    </script>
+    
+</body>
+</html>

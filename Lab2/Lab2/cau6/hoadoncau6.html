@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Xác nhận thông tin</title>
+                <style>
+                    h2 {
+                        text-align: center;
+                        color: #333;
+                    }
+
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-bottom: 20px;
+                    }
+
+                    th, td {
+                        padding: 10px;
+                        text-align: left;
+                    }
+
+                    .total {
+                        text-align: right;
+                    }
+                </style>
+            </head>
+            <body>
+                    <h2>Thông tin đăng ký</h2>
+                    <table>
+                        <tr>
+                            <th>Ngày đăng ký:</th>
+                            <td>
+                            <span  id = "ngay"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Nhân viên</th>
+                            <td>Họ tên nhân viên</td>
+                        </tr>
+                        <tr>
+                            <th>Họ và tên khách</th>
+                            <td id="name"></td>
+                        </tr>
+                        <tr>
+                            <th>Địa chỉ</th>
+                            <td id="diachi"></td>
+                        </tr>
+                        <tr>
+                            <th>Tour</th>
+                            <td id="tour"></td>
+                        </tr>
+                        <tr>
+                            <th>Ghi chú</th>
+                            <td id="ghichu"></td>
+                        </tr>
+                    </table>
+
+                    <h2 style = "text-align: left;">Số lượng khách đoàn</h2>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th>SL</th>
+                            <th>Đơn giá</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                        <tr>
+                            <td>Người lớn</td>
+                            <td id="adultsCount"></td>
+                            <td id="adultPrice"></td>
+                            <td id="adultTotal"></td>
+                        </tr>
+                        <tr>
+                            <td>Trẻ em</td>
+                            <td id="childrenCount"></td>
+                            <td id="childPrice"></td>
+                            <td id="childTotal"></td>
+                        </tr>
+                        <tr class="total">
+                            <th colspan="2" style = "text-align: center;">Tổng tiền</th>
+                            <th id="totalPrice" colspan="2" style = "text-align: center;"></th>
+                        </tr>
+                    </table>
+
+                <script>
+
+                    // Giá tính toán
+                    const adultTotalPrice = adults * tourPrice;
+                    const childTotalPrice = children * (tourPrice / 2);
+                    const total = adultTotalPrice + childTotalPrice;
+
+                    // Hiển thị thông tin
+                    document.getElementById('name').innerText = name;
+                    document.getElementById('diachi').innerText = diachi;
+                    document.getElementById('tour').innerText = tour;
+                    document.getElementById('ghichu').innerText = ghichu;
+                    document.getElementById('adultsCount').innerText = adults;
+                    document.getElementById('adultPrice').innerText = tourPrice.toLocaleString();
+                    document.getElementById('adultTotal').innerText = adultTotalPrice.toLocaleString();
+                    document.getElementById('childrenCount').innerText = children;
+                    document.getElementById('childPrice').innerText = (tourPrice / 2).toLocaleString();
+                    document.getElementById('childTotal').innerText = childTotalPrice.toLocaleString() ;
+                    document.getElementById('totalPrice').innerText = total.toLocaleString() + ' đ';
+
+                    function getDateTime() {
+                        var today = new Date(),
+                            current_day = today.getDay() + 1 != 1 ? "Thứ " + String(today.getDay() + 1) : "Chủ Nhật",
+                            dd = String(today.getDate()).padStart(2, "0"),
+                            mm = String(today.getMonth() + 1).padStart(2, "0"),
+                            yyyy = today.getFullYear(),
+                            hours = today.getHours(),
+                            minutes = today.getMinutes() < 10 ? "0" + today.getMinutes() : today.getMinutes();
+                        today = current_day + ", " + mm + "/" + dd + "/" + yyyy + ", " + hours + ":" + minutes;
+                        return today;
+                    }
+
+                    document.getElementById("ngay").innerText = getDateTime();
+
+                </script>
+
+            </body>
+            </html>

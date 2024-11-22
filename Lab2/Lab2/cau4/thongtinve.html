@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+
+            body {
+                display: flex;
+                flex-direction: column; 
+                justify-content: center; 
+                align-items: center;     
+                min-height: 100vh;       
+                margin: 0;               
+            }
+
+            table {
+                margin-bottom: 20px;      
+                width: 250px;             
+            }
+
+            td {  
+                text-align: left;
+            }
+
+            #Giave {
+                margin-left: 50px;   
+            }
+            
+            .A{
+                padding: 20px;
+                border: 2px solid #333;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <div class = "A">
+        
+        <table id = "Thongtinve" name = "Thông tin vé">
+            <tr> 
+                <td colspan="2" style = "text-align: center;"> <b> Thông tin vé </b> </td>
+            </tr>
+
+            <tr>
+                <td> <label> Khách hàng </label> </td>
+                <td> <label> Nguyễn Văn A </label> </td>
+            </tr>
+
+            <tr>
+                <td> <label> Ngày chiếu </label> </td>
+                <td id = "date"> </td>
+            </tr>
+
+            <tr>
+                <td> <label> Phim </label> </td>
+                <td id = "tenPhim"> </td>
+            </tr>
+
+            <tr> 
+                <td> <label> Suất chiếu </label> </td>
+                <td id = "suatChieu"> </td>
+            </tr>
+
+            <tr>
+                <td> <label> Phòng chiếu </label> </td>
+                <td id = "phongChieu"> </td>
+            </tr>
+        </table>
+            
+        <table id = "Giave" name = "Giá vé">
+            <tr>
+                <td> <label> <b> Ghế </b> </label> </td>
+                <td> <label> <b> Giá Vé </b> </label> </td>
+            </tr>
+            <tr>
+                <tbody id="selectedSeatsList"></tbody>
+            </tr>
+            <tr>
+               <td><b>Tổng tiền</b></td>
+               <td colspan = "2" id = "tong" style ="font-weight: bold;"></td>
+            </tr>
+        </table>
+    </div>
+        
+        <script>
+            const giaVe = [
+                { tenPhim: "Yêu em bất chấp", gia: 45000 },
+                { tenPhim: "Tháng năm rực rỡ", gia: 45000 },
+                { tenPhim: "Và em sẽ đến", gia: 55000 },
+                { tenPhim: "Chuyện ma lúc 3 giờ sáng", gia: 35000 }
+            ];
+
+            const gtphongChieu = [
+                { phongChieu : "Đồng", gt: 1.0 },
+                { phongChieu : "Bạc", gt: 1.2 },
+                { phongChieu : "Vàng", gt: 1.5 },
+                { phongChieu : "Kim cương", gt: 2.0 }
+            ];
+
+            function getGiaVe(tenPhim) {
+                const phim = giaVe.find(p => p.tenPhim === tenPhim);
+                return phim.gia ;
+            }
+
+            function getGTPC(tenPC) {
+                const phong = gtphongChieu.find(p => p.phongChieu === phongChieu);
+                return phong.gt;
+            }
+
+            function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+            }
+
+            //2024-09-30
+            function formatDateVN(dateString) {
+                const [year, month, day] = dateString.split('-');
+                return `${day}/${month}/${year}`;
+            }
+            
+            // Lấy dữ liệu từ URL
+            const tenPhim = getQueryParam('tenPhim');
+            const suatChieu = getQueryParam('suatChieu');
+            const phongChieu = getQueryParam('phongChieu');
+            const date = getQueryParam('date');
+            const selectedSeats = getQueryParam('selectedSeats').split(',');
+
+            document.getElementById('tenPhim').innerText = tenPhim;
+            document.getElementById('suatChieu').innerText = suatChieu;
+            document.getElementById('phongChieu').innerText = phongChieu;
+            document.getElementById('date').innerText = formatDateVN(date);
+        
+            
+            const selectedSeatsList = document.getElementById('selectedSeatsList');
+            let totalPrice = 0;
+            var row = "";
+            for (let option of selectedSeats) {
+                const giaVePhim = getGiaVe(tenPhim) * getGTPC(phongChieu);  
+                row += `<tr><td>${option}</td><td>${giaVePhim.toLocaleString()} đ</td></tr>`;
+                totalPrice += giaVePhim;
+                selectedSeatsList.innerHTML = row;
+            }
+
+            document.getElementById('tong').innerText = `${totalPrice.toLocaleString()} đ`
+        </script>
+    </body>
+</html>

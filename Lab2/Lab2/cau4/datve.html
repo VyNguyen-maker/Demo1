@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="style.css">  
+    </head>
+
+    <body>
+        <form>
+            <table>
+                <tr> <td colspan = "2" style = "text-align: center; vertical-align: middle;"> <b> Mua vé </b> </td> </tr>
+                <tr> 
+                    <td padding: 8px> <label> Ngày chiếu </label> </td>
+                    <td> <input type = "date" id = "date" name = "date" > </td>
+                </tr>
+
+                <tr>
+                    <td> <label> Phim </label> </td>
+                    <td>
+                        <select id = "tenPhim" name = "Phim" required>
+                            <option disabled selected style = "display: none;"> Phim </option>
+                            <option> Yêu em bất chấp </option>
+                            <option> Tháng năm rực rỡ </option>
+                            <option> Và em sẽ đến </option>
+                            <option> Chuyện ma lúc 3 giờ sáng </option>
+                        </select>
+                    </td> 
+                </tr>
+                
+                <tr> 
+                    <td> <label> Suất chiếu </label> </td>
+                    <td>
+                        <select id = "suatChieu" name = "Suất chiếu">
+                            <option disabled selected style = "display: none;"> Suất chiếu </option>
+                            <option value="1"> 9h - 12h </option>
+                            <option value="1"> 13h - 16h </option>
+                            <option value="1"> 17h - 20h </option>
+                            <option value="1"> 22h - 2h </option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td> <label> Phòng chiếu </label> </td>
+                    <td>
+                        <select id = "phongChieu" name = "Phòng chiếu">
+                            <option disabled selected style = "display: none;"> Phòng chiếu </option>
+                            <option value="2"> Đồng </option>
+                            <option value="2"> Bạc </option>
+                            <option value="2"> Vàng </option>
+                            <option value="2"> Kim cương </option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td> <label> Chọn chỗ ngồi </label> </td>
+                    <td>
+                        <select id = "Chongoi" name = "Chỗ ngồi" multiple>
+                            <option> Ghế 01 </option>
+                            <option> Ghế 02 </option>
+                            <option> Ghế 03 </option>
+                            <option> Ghế 04 </option>
+                            <option> Ghế 05 </option>
+                            <option> Ghế 06 </option>
+                            <option> Ghế 07 </option>
+                            <option> Ghế 08 </option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr> <td colspan = "2"> <button type = "button" id = "buttonMuaVe" name = "MuaVe" onclick="muaVe()"> Mua Vé </button> </td> </tr>
+            </table>
+        </form>
+
+        <script>
+            function muaVe() {
+                const tenPhim = document.getElementById('tenPhim').selectedOptions[0].text;
+                const suatChieu = document.getElementById('suatChieu').selectedOptions[0].text;
+                const phongChieu = document.getElementById('phongChieu').selectedOptions[0].text;
+                const date = document.getElementById('date').value;
+                var selectedSeats = [];
+                var scrollList = document.getElementById("Chongoi");
+                const gtpc = parseFloat(document.getElementById('phongChieu').selectedOptions[0].value);
+                const gtsc = parseFloat(document.getElementById('suatChieu').selectedOptions[0].value);
+                const a = gtpc * gtsc;
+                for (let option of scrollList) {
+                    if(option.selected){
+                    selectedSeats.push(option.text);
+                    }
+                }
+                let billContent = "";
+                let total = 0;
+                for (const seat of selectedSeats) {
+                    total += a;
+                    billContent += `<tr>
+                    <td>${seat}</td>
+                    <td>${a} đ</td>
+                    </tr>`;
+                }
+
+                billContent += `<tr>
+                    <td>Tổng tiền</td>
+                    <td>${total}đ</td>
+                    </tr>`;
+
+            const newWindow = window.open();
+            newWindow.document.write(`
+                                 <html>
+            <head>
+                <title>Hóa Đơn</title>
+                <style>
+                    body { font-family: Arial, sans-serif; }
+                    table { width: 100%; border-collapse: collapse; }
+                    th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                    h1 { text-align: center; }
+                </style>
+            </head>
+            <body>
+                <h1>Thông tin vé</h1>
+                <p>Khách hàng: Nguyễn Văn A</p>
+                <p>Ngày chiếu: ${date}</p>
+                <p>Phim: ${tenPhim}</p>
+                <p>Suất chiếu: ${suatChieu}</p>
+                <p>Phòng chiếu: ${phongChieu}</p>
+                <table>
+                    <tr>
+                        <th>Ghế</th>
+                        <th>Giá Vé</th>
+                    </tr>
+                    <tr>
+                        ${billContent} 
+                    </tr>
+                </table>
+            </body>
+            </html>
+        `);
+
+                newWindow.document.close();
+            }
+        </script>
+    </body>
+</html>

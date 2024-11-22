@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu đăng ký tour du lịch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .tour-form {
+            background-color: #FFEDCA;
+            width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tour-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .tour-header h1 {
+            font-size: 24px;
+            color: #2c3e50;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #34495e;
+        }
+
+        input[type="text"],
+        select {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 95%;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100px;
+        }
+
+        fieldset {
+            border: 2px solid #333; 
+            padding: 10px;
+            border-radius: 5px; 
+        }
+
+        legend {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .submit-container {
+            text-align: center; 
+            margin-top: 10px;   
+        }
+
+        button {
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <div class="tour-form">
+        <div class="tour-header">
+            <h1>Phiếu đăng ký tour du lịch</h1>
+        </div>
+
+        <form id="registrationForm">
+            <label for="name">Họ và tên khách</label>
+            <input type="text" id="name" name="name" placeholder="Nguyễn Văn A" required>
+
+            <label for="diachi">Địa chỉ</label>
+            <input type="text" id="diachi" name="diachi" placeholder="Nhập địa chỉ" required>
+
+            <label for="std">Điện thoại</label>
+            <input type="text" id="std" name="std" placeholder="0xxxxxxxxx" required>
+
+            <label for="tour">Tour</label>
+            <select id="tour" name="tour" required>
+                <option value="tour" disabled selected style="display:none;"> Chọn tour</option>
+                <option value="3500000">TP.HCM – Nha Trang (3.500.000 đ/Người)</option>
+                <option value="10000000">Hà Nội – Hạ Long – Tuần Châu (10.000.000 đ/Người)</option>
+                <option value="6000000">Hà Nội – Sapa (6.000.000 đ/Người)</option>
+                <option value="3000000">Đà Nẵng – Hội An (3.000.000 đ/Người)</option>
+                <option value="2000000">Buôn Mê Thuột – Kon Tum (2.000.000 đ/Người)</option>
+                <option value="2500000">TP.HCM – Cần Thơ – Cà Mau (2.500.000 đ/Người)</option>
+            </select>
+
+            <fieldset>
+                <legend>Số lượng khách hàng</legend>
+                <label for="adults">Người lớn</label>
+                <input type="number" id="adults" name="adults" min="0" value="1">
+                <label for="children">Trẻ em</label>
+                <input type="number" id="children" name="children" min="0" value="0">
+            </fieldset>
+
+            <label for="ghichu">Ghi chú</label>
+            <textarea id="ghichu" name="ghichu" rows="4" cols="50" placeholder="Viết ghi chú của bạn tại đây"></textarea>
+
+            <div class="submit-container">
+                <button type="button" onclick="register()">Đăng ký</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function getDateTime() {
+            var today = new Date(),
+            current_day = today.getDay() + 1 != 1 ? "Thứ " + String(today.getDay() + 1) : "Chủ Nhật",
+            dd = String(today.getDate()).padStart(2, "0"),
+            mm = String(today.getMonth() + 1).padStart(2, "0"),
+            yyyy = today.getFullYear(),
+            hours = today.getHours(),
+            minutes = today.getMinutes() < 10 ? "0" + today.getMinutes() : today.getMinutes();
+            today = current_day + ", " + mm + "/" + dd + "/" + yyyy + ", " + hours + ":" + minutes;
+            return today;
+        }
+        function register(){
+            const name = document.getElementById('name').value;
+            const diachi = document.getElementById('diachi').value;
+            const tour = document.getElementById('tour').selectedOptions[0].text;
+            const adults = document.getElementById('adults').value;
+            const children = document.getElementById('children').value;
+            const ghichu = document.getElementById('ghichu').value;
+            const tourPrice = document.getElementById('tour').value;
+            const today = getDateTime();
+            const tongtienNL = adults*tourPrice;
+            const tongtienTE = (children/2)*tourPrice;
+            
+        // Tạo trang HTML mới
+            const newWindow = window.open();
+            newWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="vi">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Thông tin đăng ký</title>
+                </head>
+                <body>
+                    <h1>Thông tin đăng ký</h1>
+                    <p>Ngày đăng ký: ${today}</p>
+                    <p>Họ tên nhân viên: [Nhân Viên]</p>
+                    <p>Họ tên khách: ${name}</p>
+                    <p>Địa chỉ: ${diachi}</p>
+                    <p>Tour: ${tour}</p>
+                    <p>Ghi chú: ${ghichu}</p>
+                    <h2>Số lượng khách đoàn</h2>
+                    <table>
+                        <tr>
+                            <th>SL</th>
+                            <th>Đơn giá</th>
+                            <th>Thành Tiền</th>
+                        </tr>
+                        <tr>
+                            <td>Người lớn</td>
+                            <td>${adults}</td>
+                            <td>${tongtienNL}</td>
+                        </tr>
+                        <tr>
+                            <td>Trẻ em</td>
+                            <td>${children}</td>
+                            <td>${tongtienTE}đ</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Tổng tiền</td>
+                            <td>đ</td>
+                        </tr>
+                    </table>
+                </body>
+                </html>
+            `);
+            newWindow.document.close();
+            }
+    </script>
+</body>
+</html>
